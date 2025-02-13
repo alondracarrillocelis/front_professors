@@ -5,7 +5,9 @@ import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
+  const API_URL = import.meta.env.VITE_API_URL;
 
+  console.log(API_URL);
   return (
     <>
       <div>
