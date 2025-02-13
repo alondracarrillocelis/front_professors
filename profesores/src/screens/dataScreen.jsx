@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../api";
-import { Container, Typography, Paper, CircularProgress } from "@mui/material";
-import FormComponent from "../components/FormComponent";
+import { Container, CircularProgress } from "@mui/material";
+import StepperForm from "../components/StepperForm"; // Importa el StepperForm
 
 const DataScreen = () => {
   const [data, setData] = useState(null);
@@ -21,17 +21,11 @@ const DataScreen = () => {
 
   return (
     <Container maxWidth="md" sx={{ mt: 4 }}>
-      <Paper elevation={3} sx={{ p: 4 }}>
-        <Typography variant="h4" gutterBottom>
-          Datos del Backend
-        </Typography>
-        {loading ? (
-          <CircularProgress />
-        ) : (
-          <Typography variant="body1">{JSON.stringify(data, null, 2)}</Typography>
-        )}
-      </Paper>
-      <FormComponent />
+      {loading ? (
+        <CircularProgress />
+      ) : (
+        <StepperForm /> // Renderiza el StepperForm aquí
+      )}
     </Container>
   );
 };
