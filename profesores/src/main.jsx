@@ -8,6 +8,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <Router>
       <Routes>
         <Route path="/" element={<DataScreen />} />  {/* Página principal */}
+        
       </Routes>
     </Router>
   </React.StrictMode>

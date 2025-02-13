@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Stepper, Step, StepLabel, Button, Container } from "@mui/material";
-import FormComponent from "./FormComponent";
-
+import PersonalData from "./PersonalData";
+import LaboralExperienceForm from "./LaboralExperienceData";
 const steps = ['Datos Personales', 'Datos de Contacto', 'Confirmación'];
 
 const StepperForm = () => {
@@ -26,11 +26,11 @@ const StepperForm = () => {
       </Stepper>
 
       {/* Renderizar el formulario en el primer paso */}
-      {activeStep === 0 && <FormComponent />}
+      {activeStep === 0 && <PersonalData />}
 
       {/* Aquí puedes agregar más pasos del stepper */}
-      {activeStep === 1 && <div>Paso 2: Datos de Contacto</div>}
-      {activeStep === 2 && <div>Paso 3: Confirmación</div>}
+      {activeStep === 1 &&  <LaboralExperienceForm /> }
+      {activeStep === 2 && <PersonalData />}
 
       {/* Botones de navegación */}
       <Button onClick={handleBack} disabled={activeStep === 0}>
