@@ -9,28 +9,31 @@ import {
   StepConnector,
   stepConnectorClasses,
   Box,
-  Grid
+  Grid,
+  Paper
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import Check from "@mui/icons-material/Check";
+import { Check, Person, School, Work, Star, Verified, EmojiEvents, Language } from "@mui/icons-material";
 import PersonalData from "./PersonalData";
 import LaboralExperienceForm from "./LaboralExperienceData";
-import AbilitiesForm from "./AbilitiesData"
-import LanguageForm from "./LanguagesData"
-import CertificationsForm from "./Certifications"
-import EducationForm from "./EducationData"
-import AchievementsForm from "./AchievementsData"
+import AbilitiesForm from "./AbilitiesData";
+import LanguageForm from "./LanguagesData";
+import CertificationsForm from "./Certifications";
+import EducationForm from "./EducationData";
+import AchievementsForm from "./AchievementsData";
 
+// Definir pasos con íconos
 const steps = [
-  "Datos Personales",
-  "Educación",
-  "Experiencia Laboral",
-  "Aptitudes",
-  "Certificaciones",
-  "Logros o Reconocimientos",
-  "Idiomas"
+  { label: "Datos Personales", icon: <Person /> },
+  { label: "Educación", icon: <School /> },
+  { label: "Experiencia Laboral", icon: <Work /> },
+  { label: "Aptitudes", icon: <Star /> },
+  { label: "Certificaciones", icon: <Verified /> },
+  { label: "Logros", icon: <EmojiEvents /> },
+  { label: "Idiomas", icon: <Language /> }
 ];
 
+// Estilos para el conector del Stepper
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
     top: 10,
@@ -38,41 +41,33 @@ const QontoConnector = styled(StepConnector)(({ theme }) => ({
     right: "calc(50% + 16px)"
   },
   [`& .${stepConnectorClasses.line}`]: {
-    borderColor: theme.palette.mode === "dark" ? theme.palette.grey[800] : "#eaeaf0",
+    borderColor: "#A6D785",
     borderLeftWidth: 3,
     borderRadius: 1
   }
 }));
 
-const QontoStepIconRoot = styled("div")(({ theme, ownerState }) => ({
-  color: theme.palette.mode === "dark" ? theme.palette.grey[700] : "#eaeaf0",
+// Estilos para los iconos del Stepper
+const StepIconContainer = styled("div")(({ theme, ownerState }) => ({
   display: "flex",
   alignItems: "center",
-  ...(ownerState.active && {
-    color: theme.palette.primary.main
-  }),
-  "& .QontoStepIcon-completedIcon": {
-    color: theme.palette.primary.main,
-    zIndex: 1,
-    fontSize: 18
-  },
-  "& .QontoStepIcon-circle": {
-    width: 10,
-    height: 10,
-    borderRadius: "50%",
-    backgroundColor: "currentColor"
-  }
+  justifyContent: "center",
+  width: 24,
+  height: 24,
+  borderRadius: "50%",
+  backgroundColor: ownerState.completed ? "#4CAF50" : "#A6D785",
+  color: ownerState.completed ? "white" : "#2E7D32"
 }));
 
-function QontoStepIcon(props) {
-  const { active, completed, className } = props;
-
+// Componente personalizado para los iconos del Stepper
+const CustomStepIcon = (props) => {
+  const { active, completed, icon } = props;
   return (
-    <QontoStepIconRoot ownerState={{ active }} className={className}>
-      {completed ? <Check className="QontoStepIcon-completedIcon" /> : <div className="QontoStepIcon-circle" />}
-    </QontoStepIconRoot>
+    <StepIconContainer ownerState={{ active, completed }}>
+      {completed ? <Check fontSize="small" /> : icon}
+    </StepIconContainer>
   );
-}
+};
 
 const StepperForm = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -86,47 +81,69 @@ const StepperForm = () => {
   };
 
   return (
-   <Container maxWidth="xl" sx={{ mt: 4, p: 4, backgroundColor: "white", borderRadius: 3, boxShadow: 3 }}>
-  <Grid container spacing={5}> 
-    {/* Columna del Stepper */}
-    <Grid item xs={3}> {/* Reducido a 3 para dar más espacio al formulario */}
-      <Stepper activeStep={activeStep} orientation="vertical" connector={<QontoConnector />}>
-        {steps.map((label) => (
-          <Step key={label}>
-            <StepLabel StepIconComponent={QontoStepIcon}>{label}</StepLabel>
-          </Step>
-        ))}
-      </Stepper>
-    </Grid>
+    <Paper elevation={3} sx={{ borderRadius: "20px", padding: "20px", margin: "20px", boxShadow: 3 }}>
+      <Container maxWidth="xl" sx={{ backgroundColor: "white", borderRadius: 3 }}>
+        <Grid container spacing={5}>
+          {/* Columna del Stepper */}
+          <Grid item xs={3}>
+            <Stepper activeStep={activeStep} orientation="vertical" connector={<QontoConnector />}>
+              {steps.map((step, index) => (
+                <Step key={index}>
+                  <StepLabel StepIconComponent={() => <CustomStepIcon completed={activeStep > index} icon={step.icon} />}>
+                    {step.label}
+                  </StepLabel>
+                </Step>
+              ))}
+            </Stepper>
+          </Grid>
 
-    {/* Columna del formulario */}
-    <Grid item xs={9}> {/* Más ancho para el formulario */}
-      <Typography variant="h5" gutterBottom sx={{ mb: 2 }}>
-        {steps[activeStep]}
-      </Typography>
+          {/* Columna del formulario */}
+          <Grid item xs={9}>
+            <Typography variant="h5" gutterBottom sx={{ mb: 2, fontWeight: "bold", color: "#2E7D32" }}>
+              {steps[activeStep].label}
+            </Typography>
 
-      <Box>
-        {activeStep === 0 && <PersonalData />}
-        {activeStep === 1 && <EducationForm/>}
-        {activeStep === 2 && <LaboralExperienceForm />}
-        {activeStep === 3 && <AbilitiesForm/>}
-        {activeStep === 4 && <CertificationsForm/>}
-        {activeStep === 5 && <AchievementsForm/>}
-        {activeStep === 6 && <LanguageForm/>}
-      </Box>
+            <Box>
+              {activeStep === 0 && <PersonalData />}
+              {activeStep === 1 && <EducationForm />}
+              {activeStep === 2 && <LaboralExperienceForm />}
+              {activeStep === 3 && <AbilitiesForm />}
+              {activeStep === 4 && <CertificationsForm />}
+              {activeStep === 5 && <AchievementsForm />}
+              {activeStep === 6 && <LanguageForm />}
+            </Box>
 
-      <Box sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}>
-        <Button onClick={handleBack} disabled={activeStep === 0}>
-          Atrás
-        </Button>
-        <Button variant="contained" color="primary" onClick={handleNext}>
-          {activeStep === steps.length - 1 ? "Finalizar" : "Siguiente"}
-        </Button>
-      </Box>
-    </Grid>
-  </Grid>
-</Container>
-
+            {/* Botones de navegación */}
+            <Box sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}>
+              <Button
+                onClick={handleBack}
+                disabled={activeStep === 0}
+                sx={{
+                  bgcolor: "#A6D785",
+                  color: "#2E7D32",
+                  borderRadius: "20px",
+                  "&:hover": { bgcolor: "#8BC34A" }
+                }}
+              >
+                Atrás
+              </Button>
+              <Button
+                variant="contained"
+                onClick={handleNext}
+                sx={{
+                  bgcolor: "#A6D785",
+                  color: "#2E7D32",
+                  borderRadius: "20px",
+                  "&:hover": { bgcolor: "#8BC34A" }
+                }}
+              >
+                {activeStep === steps.length - 1 ? "Finalizar" : "Siguiente"}
+              </Button>
+            </Box>
+          </Grid>
+        </Grid>
+      </Container>
+    </Paper>
   );
 };
 

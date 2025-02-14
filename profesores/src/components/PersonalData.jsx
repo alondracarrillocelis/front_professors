@@ -1,8 +1,8 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Container, TextField, Button, Paper, Typography, Grid, MenuItem } from "@mui/material";
+import { AccountCircle, Email, Phone, Home, Badge } from "@mui/icons-material";
 
-// Esquema de validación con Yup
 const validationSchema = Yup.object({
   nombre: Yup.string().min(1).max(50).required("El nombre es obligatorio"),
   apellido_paterno: Yup.string().min(1).max(50).required("El apellido paterno es obligatorio"),
@@ -48,77 +48,44 @@ const PersonalData = () => {
 
   return (
     <Container maxWidth="md" sx={{ mt: 4 }}>
-      <Paper elevation={3} sx={{ p: 4 }}>
-        <Typography variant="h5" gutterBottom>Formulario de Registro</Typography>
+      <Paper elevation={3} sx={{ p: 4, borderRadius: 3 }}>
+        <Typography variant="h5" gutterBottom sx={{ color: "#A6D785", fontWeight: "bold", textAlign: "center" }}>
+          Formulario de Registro
+        </Typography>
         <form onSubmit={formik.handleSubmit}>
           <Grid container spacing={2}>
-          <Grid item xs={12} sm={12}>
-              <TextField
-                fullWidth
-                label="Matrícula"
-                name="matricula"
-                value={formik.values.matricula}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.matricula && Boolean(formik.errors.matricula)}
-                helperText={formik.touched.matricula && formik.errors.matricula}
-                required
-              />
-            </Grid>
-            <Grid item xs={12} sm={12}>
-              <TextField
-                fullWidth
-                label="Nombre"
-                name="nombre"
-                value={formik.values.nombre}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.nombre && Boolean(formik.errors.nombre)}
-                helperText={formik.touched.nombre && formik.errors.nombre}
-                required
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                label="Apellido Paterno"
-                name="apellido_paterno"
-                value={formik.values.apellido_paterno}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.apellido_paterno && Boolean(formik.errors.apellido_paterno)}
-                helperText={formik.touched.apellido_paterno && formik.errors.apellido_paterno}
-                required
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                label="Apellido Materno"
-                name="apellido_materno"
-                value={formik.values.apellido_materno}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.apellido_materno && Boolean(formik.errors.apellido_materno)}
-                helperText={formik.touched.apellido_materno && formik.errors.apellido_materno}
-                required
-              />
-            </Grid>
-
-       
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                label="CURP"
-                name="curp"
-                value={formik.values.curp}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.curp && Boolean(formik.errors.curp)}
-                helperText={formik.touched.curp && formik.errors.curp}
-                required
-              />
-            </Grid>
+            {[{
+              label: "Matrícula", name: "matricula", icon: <Badge />
+            }, {
+              label: "Nombre", name: "nombre", icon: <AccountCircle />
+            }, {
+              label: "Apellido Paterno", name: "apellido_paterno" },
+              { label: "Apellido Materno", name: "apellido_materno" },
+              { label: "CURP", name: "curp" },
+              { label: "Celular", name: "celular", icon: <Phone /> },
+              { label: "Correo", name: "correo", type: "email", icon: <Email /> },
+              { label: "Calle", name: "calle", icon: <Home /> },
+              { label: "Código Postal", name: "codigo_postal" },
+              { label: "Colonia", name: "colonia" },
+              { label: "Número Interior", name: "numero_int" },
+              { label: "Número Exterior", name: "numero_ext" }
+            ].map((field, index) => (
+              <Grid key={index} item xs={12} sm={field.name.includes("apellido") ? 6 : 12}>
+                <TextField
+                  fullWidth
+                  label={field.label}
+                  name={field.name}
+                  type={field.type || "text"}
+                  value={formik.values[field.name]}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched[field.name] && Boolean(formik.errors[field.name])}
+                  helperText={formik.touched[field.name] && formik.errors[field.name]}
+                  required={!["numero_int", "fecha_nacimiento"].includes(field.name)}
+                  InputProps={{ startAdornment: field.icon }}
+                />
+              </Grid>
+            ))}
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
@@ -137,7 +104,6 @@ const PersonalData = () => {
                 ))}
               </TextField>
             </Grid>
-           
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
@@ -150,56 +116,15 @@ const PersonalData = () => {
                 InputLabelProps={{ shrink: true }}
               />
             </Grid>
-
-            {/* Celular y Tipo de Sangre */}
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                label="Celular"
-                name="celular"
-                value={formik.values.celular}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.celular && Boolean(formik.errors.celular)}
-                helperText={formik.touched.celular && formik.errors.celular}
-                required
-              />
-            </Grid>
-            <Grid item xs={12} sm={12}>
-              <TextField
-                fullWidth
-                label="Correo"
-                name="correo"
-                type="email"
-                value={formik.values.correo}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.correo && Boolean(formik.errors.correo)}
-                helperText={formik.touched.correo && formik.errors.correo}
-                required
-              />
-            </Grid>
-          
-
-            {/* Dirección */}
             <Grid item xs={12}>
-              <TextField fullWidth label="Calle" name="calle" required />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField fullWidth label="Código Postal" name="codigo_postal" required />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField fullWidth label="Colonia" name="colonia" required />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField fullWidth label="Número Interior" name="numero_int" />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField fullWidth label="Número Exterior" name="numero_ext" required />
-            </Grid>
-
-            <Grid item xs={12}>
-              <Button type="submit" variant="contained" fullWidth>Enviar</Button>
+              <Button type="submit" variant="contained" fullWidth sx={{
+                backgroundColor: "#A6D785",
+                borderRadius: 3,
+                '&:hover': { backgroundColor: "#8EC16D" },
+                transition: "0.3s ease-in-out"
+              }}>
+                Enviar
+              </Button>
             </Grid>
           </Grid>
         </form>
