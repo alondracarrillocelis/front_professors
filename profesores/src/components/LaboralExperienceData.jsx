@@ -15,8 +15,8 @@ import {
 } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { grey } from "@mui/material/colors";
 
-// Esquema de validación con Yup
 const validationSchema = Yup.object({
   id_profesor: Yup.string().required("El ID del profesor es obligatorio"),
   empresa: Yup.string()
@@ -45,25 +45,20 @@ const validationSchema = Yup.object({
 });
 
 const LaboralExperienceForm = () => {
-  const [experiences, setExperiences] = useState([{}]); // Estado para manejar múltiples experiencias
+  const [experiences, setExperiences] = useState([{}]);
 
-  // Función para agregar una nueva experiencia
   const addExperience = () => {
     setExperiences([...experiences, {}]);
   };
 
-  // Función para eliminar una experiencia
   const removeExperience = (index) => {
-    if (index === 0) return; // Evitar eliminar el primer card
-
+    if (index === 0) return;
     const updatedExperiences = experiences.filter((_, i) => i !== index);
     setExperiences(updatedExperiences);
   };
 
-  // Función para manejar el envío de todas las experiencias
   const handleSubmitAll = () => {
     console.log("Experiencias enviadas:", experiences);
-    // Aquí puedes enviar los datos al backend
   };
 
   return (
@@ -78,13 +73,13 @@ const LaboralExperienceForm = () => {
             index={index}
             experiences={experiences}
             setExperiences={setExperiences}
-            onRemove={() => removeExperience(index)} // Pasar la función para eliminar
+            onRemove={() => removeExperience(index)}
           />
         ))}
       </Stack>
       <Button
         variant="outlined"
-        startIcon={<AddCircleOutlineIcon />}
+        startIcon={<AddCircleOutlineIcon sx={{ color: grey[500] }} />}
         onClick={addExperience}
         sx={{ mt: 2 }}
       >
@@ -102,7 +97,6 @@ const LaboralExperienceForm = () => {
   );
 };
 
-// Componente de la tarjeta de experiencia laboral
 const ExperienceCard = ({ index, experiences, setExperiences, onRemove }) => {
   const formik = useFormik({
     initialValues: experiences[index] || {
@@ -133,147 +127,21 @@ const ExperienceCard = ({ index, experiences, setExperiences, onRemove }) => {
             Experiencia Laboral #{index + 1}
           </Typography>
           {index !== 0 && (
-          <IconButton onClick={onRemove} color="error">
-            <DeleteIcon />
-          </IconButton>
-            )}
+            <IconButton onClick={onRemove} sx={{ color: grey[500] }}>
+              <DeleteIcon />
+            </IconButton>
+          )}
         </Stack>
         <form onSubmit={formik.handleSubmit}>
-          {/* ID Profesor */}
-          <TextField
-            fullWidth
-            label="ID Profesor"
-            name="id_profesor"
-            value={formik.values.id_profesor}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.id_profesor && Boolean(formik.errors.id_profesor)}
-            helperText={formik.touched.id_profesor && formik.errors.id_profesor}
-            margin="normal"
-            required
-          />
-
-          {/* Empresa */}
-          <TextField
-            fullWidth
-            label="Empresa"
-            name="empresa"
-            value={formik.values.empresa}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.empresa && Boolean(formik.errors.empresa)}
-            helperText={formik.touched.empresa && formik.errors.empresa}
-            margin="normal"
-            required
-          />
-
-          {/* Cargo */}
-          <TextField
-            fullWidth
-            label="Cargo"
-            name="cargo"
-            value={formik.values.cargo}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.cargo && Boolean(formik.errors.cargo)}
-            helperText={formik.touched.cargo && formik.errors.cargo}
-            margin="normal"
-            required
-          />
-
-          {/* Fecha de Inicio */}
-          <TextField
-            fullWidth
-            label="Fecha de Inicio"
-            name="fecha_inicio"
-            type="date"
-            value={formik.values.fecha_inicio}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.fecha_inicio && Boolean(formik.errors.fecha_inicio)}
-            helperText={formik.touched.fecha_inicio && formik.errors.fecha_inicio}
-            margin="normal"
-            InputLabelProps={{ shrink: true }}
-            required
-          />
-
-          {/* Fecha de Finalización */}
-          {!formik.values.actual && (
-            <TextField
-              fullWidth
-              label="Fecha de Finalización"
-              name="fecha_finalizacion"
-              type="date"
-              value={formik.values.fecha_finalizacion}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.fecha_finalizacion && Boolean(formik.errors.fecha_finalizacion)}
-              helperText={formik.touched.fecha_finalizacion && formik.errors.fecha_finalizacion}
-              margin="normal"
-              InputLabelProps={{ shrink: true }}
-              required
-            />
-          )}
-
-          {/* Actual */}
-          <FormControlLabel
-            control={
-              <Checkbox
-                name="actual"
-                checked={formik.values.actual}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-            }
-            label="¿Trabajo actual?"
-          />
-
-          {/* Referencia */}
-          <TextField
-            fullWidth
-            label="Referencia"
-            name="referencia"
-            value={formik.values.referencia}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.referencia && Boolean(formik.errors.referencia)}
-            helperText={formik.touched.referencia && formik.errors.referencia}
-            margin="normal"
-            required
-          />
-
-          {/* Anotaciones */}
-          <TextField
-            fullWidth
-            label="Anotaciones"
-            name="anotaciones"
-            value={formik.values.anotaciones}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.anotaciones && Boolean(formik.errors.anotaciones)}
-            helperText={formik.touched.anotaciones && formik.errors.anotaciones}
-            margin="normal"
-            multiline
-            rows={3}
-          />
-
-          {/* Funciones */}
-          <TextField
-            fullWidth
-            label="Funciones"
-            name="funciones"
-            value={formik.values.funciones}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.funciones && Boolean(formik.errors.funciones)}
-            helperText={formik.touched.funciones && formik.errors.funciones}
-            margin="normal"
-            multiline
-            rows={4}
-            required
-          />
-
-          {/* Botón de Envío */}
+          <TextField fullWidth label="ID Profesor" name="id_profesor" {...formik.getFieldProps("id_profesor")} margin="normal" required />
+          <TextField fullWidth label="Empresa" name="empresa" {...formik.getFieldProps("empresa")} margin="normal" required />
+          <TextField fullWidth label="Cargo" name="cargo" {...formik.getFieldProps("cargo")} margin="normal" required />
+          <TextField fullWidth label="Fecha de Inicio" name="fecha_inicio" type="date" {...formik.getFieldProps("fecha_inicio")} margin="normal" InputLabelProps={{ shrink: true }} required />
+          {!formik.values.actual && <TextField fullWidth label="Fecha de Finalización" name="fecha_finalizacion" type="date" {...formik.getFieldProps("fecha_finalizacion")} margin="normal" InputLabelProps={{ shrink: true }} required />}
+          <FormControlLabel control={<Checkbox {...formik.getFieldProps("actual")} />} label="¿Trabajo actual?" />
+          <TextField fullWidth label="Referencia" name="referencia" {...formik.getFieldProps("referencia")} margin="normal" required />
+          <TextField fullWidth label="Anotaciones" name="anotaciones" {...formik.getFieldProps("anotaciones")} margin="normal" multiline rows={3} />
+          <TextField fullWidth label="Funciones" name="funciones" {...formik.getFieldProps("funciones")} margin="normal" multiline rows={4} required />
           <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
             Guardar Experiencia
           </Button>
