@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { motion } from 'framer-motion';
 
 const AchievementsForm = ({ onSubmit }) => {
   const [achievements, setAchievements] = useState([
@@ -30,7 +31,7 @@ const AchievementsForm = ({ onSubmit }) => {
 
   const handleSubmitAll = () => {
     onSubmit(achievements);
-    setAchievements([{ nombre: '', institucion: '', fecha: '', tipo: '' }]); // Reiniciar después de enviar
+    setAchievements([{ nombre: '', institucion: '', fecha: '', tipo: '' }]);
   };
 
   const addAchievement = () => {
@@ -38,10 +39,8 @@ const AchievementsForm = ({ onSubmit }) => {
   };
 
   const removeAchievement = (index) => {
-    if (index === 0) return; // Evitar eliminar el primer card
-
-    const updatedAchievements = achievements.filter((_, i) => i !== index);
-    setAchievements(updatedAchievements);
+    if (index === 0) return;
+    setAchievements(achievements.filter((_, i) => i !== index));
   };
 
   return (
@@ -51,28 +50,28 @@ const AchievementsForm = ({ onSubmit }) => {
       </Typography>
       <Stack spacing={3}>
         {achievements.map((achievement, index) => (
-          <AchievementCard
-            key={index}
-            index={index}
-            achievement={achievement}
-            handleChange={handleChange}
-            onRemove={() => removeAchievement(index)}
-          />
+          <motion.div key={index} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+            <AchievementCard
+              index={index}
+              achievement={achievement}
+              handleChange={handleChange}
+              onRemove={() => removeAchievement(index)}
+            />
+          </motion.div>
         ))}
       </Stack>
       <Button
         variant="outlined"
         startIcon={<AddCircleOutlineIcon />}
         onClick={addAchievement}
-        sx={{ mt: 2 }}
+        sx={{ mt: 2, borderRadius: 2, borderColor: '#A6D785', color: '#A6D785' }}
       >
         Agregar otro logro
       </Button>
       <Button
         variant="contained"
-        color="primary"
+        sx={{ mt: 2, ml: 2, borderRadius: 2, backgroundColor: '#A6D785', color: 'white' }}
         onClick={handleSubmitAll}
-        sx={{ mt: 2, ml: 2 }}
       >
         Guardar todos los logros
       </Button>
@@ -82,7 +81,7 @@ const AchievementsForm = ({ onSubmit }) => {
 
 const AchievementCard = ({ index, achievement, handleChange, onRemove }) => {
   return (
-    <Card variant="outlined">
+    <Card variant="outlined" sx={{ borderRadius: 3, borderColor: '#A6D785' }}>
       <CardContent>
         <Stack direction="row" justifyContent="space-between" alignItems="center">
           <Typography variant="h6" gutterBottom>
@@ -96,7 +95,6 @@ const AchievementCard = ({ index, achievement, handleChange, onRemove }) => {
         </Stack>
         <form>
           <Grid container spacing={2}>
-            {/* Nombre del logro */}
             <Grid item xs={12}>
               <TextField
                 fullWidth
@@ -107,8 +105,6 @@ const AchievementCard = ({ index, achievement, handleChange, onRemove }) => {
                 required
               />
             </Grid>
-
-            {/* Institución */}
             <Grid item xs={12}>
               <TextField
                 fullWidth
@@ -119,8 +115,6 @@ const AchievementCard = ({ index, achievement, handleChange, onRemove }) => {
                 required
               />
             </Grid>
-
-            {/* Fecha */}
             <Grid item xs={12}>
               <TextField
                 fullWidth
@@ -133,13 +127,10 @@ const AchievementCard = ({ index, achievement, handleChange, onRemove }) => {
                 required
               />
             </Grid>
-
-            {/* Tipo de reconocimiento */}
             <Grid item xs={12}>
               <FormControl fullWidth required>
                 <InputLabel>Tipo de reconocimiento</InputLabel>
                 <Select
-                  label="Tipo de reconocimiento"
                   name="tipo"
                   value={achievement.tipo}
                   onChange={(e) => handleChange(index, e)}
@@ -148,9 +139,7 @@ const AchievementCard = ({ index, achievement, handleChange, onRemove }) => {
                   <MenuItem value="Publicaciones">Publicaciones</MenuItem>
                   <MenuItem value="Premios">Premios</MenuItem>
                   <MenuItem value="Certificaciones">Certificaciones</MenuItem>
-                  <MenuItem value="Reconocimientos académicos">
-                    Reconocimientos académicos
-                  </MenuItem>
+                  <MenuItem value="Reconocimientos académicos">Reconocimientos académicos</MenuItem>
                   <MenuItem value="Otros">Otros</MenuItem>
                 </Select>
               </FormControl>

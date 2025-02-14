@@ -12,17 +12,16 @@ import {
   Container,
   Stack,
   IconButton,
+  InputAdornment,
 } from '@mui/material';
+import { motion } from 'framer-motion';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteIcon from '@mui/icons-material/Delete';
+import LanguageIcon from '@mui/icons-material/Language';
+import SchoolIcon from '@mui/icons-material/School';
 
 const LanguageForm = ({ onSubmit }) => {
   const [languages, setLanguages] = useState([{ language: '', proficiency: '' }]);
-
-  const validationSchema = Yup.object({
-    language: Yup.string().required('Campo obligatorio'),
-    proficiency: Yup.string().required('Campo obligatorio'),
-  });
 
   const handleSubmitAll = () => {
     onSubmit(languages);
@@ -35,8 +34,7 @@ const LanguageForm = ({ onSubmit }) => {
 
   const removeLanguage = (index) => {
     if (index === 0) return; // Evitar eliminar el primer card
-    const updatedLanguages = languages.filter((_, i) => i !== index);
-    setLanguages(updatedLanguages);
+    setLanguages(languages.filter((_, i) => i !== index));
   };
 
   return (
@@ -46,31 +44,48 @@ const LanguageForm = ({ onSubmit }) => {
       </Typography>
       <Stack spacing={3}>
         {languages.map((language, index) => (
-          <LanguageCard
+          <motion.div
             key={index}
-            index={index}
-            language={language}
-            setLanguages={setLanguages}
-            onRemove={() => removeLanguage(index)}
-          />
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <LanguageCard
+              index={index}
+              language={language}
+              setLanguages={setLanguages}
+              onRemove={() => removeLanguage(index)}
+            />
+          </motion.div>
         ))}
       </Stack>
-      <Button
-        variant="outlined"
-        startIcon={<AddCircleOutlineIcon />}
-        onClick={addLanguage}
-        sx={{ mt: 2 }}
-      >
-        Agregar otro idioma
-      </Button>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleSubmitAll}
-        sx={{ mt: 2, ml: 2 }}
-      >
-        Guardar todos los idiomas
-      </Button>
+      <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
+        <Button
+          variant="contained"
+          startIcon={<AddCircleOutlineIcon />}
+          onClick={addLanguage}
+          sx={{
+            backgroundColor: '#A6D785',
+            color: '#fff',
+            '&:hover': { backgroundColor: '#8FCB69' },
+            borderRadius: 2,
+          }}
+        >
+          Agregar otro idioma
+        </Button>
+        <Button
+          variant="contained"
+          onClick={handleSubmitAll}
+          sx={{
+            backgroundColor: '#A6D785',
+            color: '#fff',
+            '&:hover': { backgroundColor: '#8FCB69' },
+            borderRadius: 2,
+          }}
+        >
+          Guardar todos los idiomas
+        </Button>
+      </Stack>
     </Container>
   );
 };
@@ -90,15 +105,21 @@ const LanguageCard = ({ index, language, setLanguages, onRemove }) => {
   });
 
   return (
-    <Card variant="outlined">
+    <Card
+      variant="outlined"
+      sx={{ borderRadius: 3, borderColor: '#A6D785', boxShadow: 2 }}
+      component={motion.div}
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.3 }}
+    >
       <CardContent>
         <Stack direction="row" justifyContent="space-between" alignItems="center">
           <Typography variant="h6" gutterBottom>
             Idioma #{index + 1}
           </Typography>
-          {/* Ocultar el botón de eliminar en el primer card */}
           {index !== 0 && (
-            <IconButton onClick={onRemove} color="error">
+            <IconButton onClick={onRemove} sx={{ color: '#D32F2F' }}>
               <DeleteIcon />
             </IconButton>
           )}
@@ -116,6 +137,13 @@ const LanguageCard = ({ index, language, setLanguages, onRemove }) => {
                 onBlur={formik.handleBlur}
                 error={formik.touched.language && Boolean(formik.errors.language)}
                 helperText={formik.touched.language && formik.errors.language}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LanguageIcon />
+                    </InputAdornment>
+                  ),
+                }}
               />
             </Grid>
 
@@ -131,6 +159,13 @@ const LanguageCard = ({ index, language, setLanguages, onRemove }) => {
                 onBlur={formik.handleBlur}
                 error={formik.touched.proficiency && Boolean(formik.errors.proficiency)}
                 helperText={formik.touched.proficiency && formik.errors.proficiency}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SchoolIcon />
+                    </InputAdornment>
+                  ),
+                }}
               >
                 <MenuItem value="Básico">Básico</MenuItem>
                 <MenuItem value="Intermedio">Intermedio</MenuItem>
@@ -139,7 +174,17 @@ const LanguageCard = ({ index, language, setLanguages, onRemove }) => {
               </TextField>
             </Grid>
           </Grid>
-          <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{
+              mt: 2,
+              backgroundColor: '#A6D785',
+              color: '#fff',
+              '&:hover': { backgroundColor: '#8FCB69' },
+              borderRadius: 2,
+            }}
+          >
             Guardar Idioma
           </Button>
         </form>
