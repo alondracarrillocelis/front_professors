@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import api from "../api";
 import { Container, CircularProgress } from "@mui/material";
 import StepperForm from "../components/StepperForm"; // Importa el StepperForm
+import Login from "../components/Login"; // Importa el componente Login
 
 const DataScreen = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Estado para manejar el login
 
   useEffect(() => {
     api.get("/api/profesor") 
@@ -20,11 +22,15 @@ const DataScreen = () => {
   }, []);
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4 }}>
+    <Container maxWidth="full" >
       {loading ? (
         <CircularProgress />
       ) : (
-        <StepperForm /> 
+        isLoggedIn ? (
+          <StepperForm /> 
+        ) : (
+          <Login onLogin={() => setIsLoggedIn(true)} /> // Muestra el login si no está logueado
+        )
       )}
     </Container>
   );
