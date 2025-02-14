@@ -8,7 +8,7 @@ const DataScreen = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.get("/api/profesor") // Cambia el endpoint según tu backend
+    api.get("/api/profesor") 
       .then((response) => {
         setData(response.data);
         setLoading(false);
@@ -20,11 +20,11 @@ const DataScreen = () => {
   }, []);
 
   return (
-    <Container maxWidth="md" sx={{ mt: 4 }}>
+    <Container maxWidth="lg" sx={{ mt: 4 }}>
       {loading ? (
         <CircularProgress />
       ) : (
-        <StepperForm /> // Renderiza el StepperForm aquí
+        <StepperForm /> 
       )}
     </Container>
   );

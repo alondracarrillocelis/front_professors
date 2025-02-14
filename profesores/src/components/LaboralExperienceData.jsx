@@ -54,6 +54,8 @@ const LaboralExperienceForm = () => {
 
   // Función para eliminar una experiencia
   const removeExperience = (index) => {
+    if (index === 0) return; // Evitar eliminar el primer card
+
     const updatedExperiences = experiences.filter((_, i) => i !== index);
     setExperiences(updatedExperiences);
   };
@@ -130,9 +132,11 @@ const ExperienceCard = ({ index, experiences, setExperiences, onRemove }) => {
           <Typography variant="h6" gutterBottom>
             Experiencia Laboral #{index + 1}
           </Typography>
+          {index !== 0 && (
           <IconButton onClick={onRemove} color="error">
             <DeleteIcon />
           </IconButton>
+            )}
         </Stack>
         <form onSubmit={formik.handleSubmit}>
           {/* ID Profesor */}
