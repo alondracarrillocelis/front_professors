@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { motion } from "framer-motion";
 
 // Esquema de validación con Yup
 const validationSchema = Yup.object({
@@ -61,15 +62,14 @@ const AbilitiesForm = () => {
         variant="outlined"
         startIcon={<AddCircleOutlineIcon />}
         onClick={addAbility}
-        sx={{ mt: 2 }}
+        sx={{ mt: 2, borderRadius: 2, borderColor: "#A6D785", color: "#A6D785" }}
       >
         Agregar otra habilidad
       </Button>
       <Button
         variant="contained"
-        color="primary"
+        sx={{ mt: 2, ml: 2, borderRadius: 2, backgroundColor: "#A6D785", "&:hover": { backgroundColor: "#8DC66D" } }}
         onClick={handleSubmitAll}
-        sx={{ mt: 2, ml: 2 }}
       >
         Guardar todas las habilidades
       </Button>
@@ -93,56 +93,58 @@ const AbilityCard = ({ index, abilities, setAbilities, onRemove }) => {
   });
 
   return (
-    <Card variant="outlined">
-      <CardContent>
-        <Stack direction="row" justifyContent="space-between" alignItems="center">
-          <Typography variant="h6" gutterBottom>
-            Habilidad #{index + 1}
-          </Typography>
-          {index !== 0 && (
-          <IconButton onClick={onRemove} color="error">
-            <DeleteIcon />
-          </IconButton>
-             )}
-        </Stack>
-        <form onSubmit={formik.handleSubmit}>
-          {/* Aptitud */}
-          <TextField
-            fullWidth
-            label="Aptitud"
-            name="aptitud"
-            value={formik.values.aptitud}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.aptitud && Boolean(formik.errors.aptitud)}
-            helperText={formik.touched.aptitud && formik.errors.aptitud}
-            margin="normal"
-            required
-          />
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+      <Card variant="outlined" sx={{ borderRadius: 2, borderColor: "#A6D785" }}>
+        <CardContent>
+          <Stack direction="row" justifyContent="space-between" alignItems="center">
+            <Typography variant="h6" gutterBottom>
+              Habilidad #{index + 1}
+            </Typography>
+            {index !== 0 && (
+              <IconButton onClick={onRemove} color="error">
+                <DeleteIcon />
+              </IconButton>
+            )}
+          </Stack>
+          <form onSubmit={formik.handleSubmit}>
+            {/* Aptitud */}
+            <TextField
+              fullWidth
+              label="Aptitud"
+              name="aptitud"
+              value={formik.values.aptitud}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.aptitud && Boolean(formik.errors.aptitud)}
+              helperText={formik.touched.aptitud && formik.errors.aptitud}
+              margin="normal"
+              required
+            />
 
-          {/* Descripción */}
-          <TextField
-            fullWidth
-            label="Descripción"
-            name="descripcion"
-            value={formik.values.descripcion}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.descripcion && Boolean(formik.errors.descripcion)}
-            helperText={formik.touched.descripcion && formik.errors.descripcion}
-            margin="normal"
-            multiline
-            rows={4}
-            required
-          />
+            {/* Descripción */}
+            <TextField
+              fullWidth
+              label="Descripción"
+              name="descripcion"
+              value={formik.values.descripcion}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.descripcion && Boolean(formik.errors.descripcion)}
+              helperText={formik.touched.descripcion && formik.errors.descripcion}
+              margin="normal"
+              multiline
+              rows={4}
+              required
+            />
 
-          {/* Botón de Envío */}
-          <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
-            Guardar Habilidad
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
+            {/* Botón de Envío */}
+            <Button type="submit" variant="contained" fullWidth sx={{ mt: 2, borderRadius: 2, backgroundColor: "#A6D785", "&:hover": { backgroundColor: "#8DC66D" } }}>
+              Guardar Habilidad
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+    </motion.div>
   );
 };
 
