@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { AppBar, Toolbar, Button, Container } from "@mui/material";
+import { AppBar, Toolbar, Button, Container, Grid, Paper, Typography, Box } from "@mui/material";
 import FormCV from "../components/FormCV";
 import WorkExperience from "../components/WorkExperiencie";
 import Experience from "../components/Experiencie";
 import Certification from "../components/Certification";
-import Education from "../components/Education"; 
-import Languages from "../components/Languages"; 
-import Achievements from "../components/Achievements"; 
+import Education from "../components/Education";
+import Languages from "../components/Languages";
+import Achievements from "../components/Achievements";
 import { useParams } from "react-router-dom";
 
 const ShowCV = () => {
@@ -16,71 +16,66 @@ const ShowCV = () => {
   console.log("ID recibido en el frontend:", id);
 
   return (
-    <div>
-      <AppBar position="static">
+    <Box sx={{ flexGrow: 1, bgcolor: "#f5f5f5", minHeight: "100vh" }}>
+      <AppBar position="static" sx={{ bgcolor: "#2e7d32" }}>
         <Toolbar>
-          <Button color="inherit" onClick={() => setView("form")}>
-            Datos personales
-          </Button>
-          <Button color="inherit" onClick={() => setView("aptitudes")}>
-            Aptitudes
-          </Button>
-          <Button color="inherit" onClick={() => setView("certification")}>
-            Certificación
-          </Button>
-          <Button color="inherit" onClick={() => setView("education")}>
-            Educación
-          </Button>
-          <Button color="inherit" onClick={() => setView("experiencie")}>
-            Experiencia
-          </Button>
-          <Button color="inherit" onClick={() => setView("languages")}>
-            Idiomas
-          </Button>
-          <Button color="inherit" onClick={() => setView("achievements")}>
-            Logros
-          </Button>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Visualización de CV
+          </Typography>
         </Toolbar>
       </AppBar>
 
-      <Container>
-        {view === "form" && (
-          <div>
-            <FormCV id={id} />
-          </div>
-        )}
-        {view === "aptitudes" && (
-          <div>
-            <WorkExperience id={id} />
-          </div>
-        )}
-        {view === "certification" && (
-          <div>
-            <Certification id={id} />
-          </div>
-        )}
-        {view === "education" && (
-          <div>
-            <Education id={id} />
-          </div>
-        )}
-        {view === "experiencie" && (
-          <div>
-            <Experience id={id} />
-          </div>
-        )}
-        {view === "languages" && (
-          <div>
-            <Languages id={id} />
-          </div>
-        )}
-        {view === "achievements" && (
-          <div>
-            <Achievements id={id} />
-          </div>
-        )}
+      <Container sx={{ mt: 4 }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={9}>
+            <Paper elevation={3} sx={{ p: 3 }}>
+              {view === "form" && <FormCV id={id} />}
+              {view === "aptitudes" && <WorkExperience id={id} />}
+              {view === "certification" && <Certification id={id} />}
+              {view === "education" && <Education id={id} />}
+              {view === "experiencie" && <Experience id={id} />}
+              {view === "languages" && <Languages id={id} />}
+              {view === "achievements" && <Achievements id={id} />}
+            </Paper>
+          </Grid>
+
+          <Grid item xs={12} md={3}>
+            <Paper elevation={3} sx={{ p: 2, bgcolor: "#e8f5e9" }}>
+              <Typography variant="h6" sx={{ mb: 2, color: "#2e7d32" }}>
+                Categorías
+              </Typography>
+              {[
+                { label: "Datos personales", value: "form" },
+                { label: "Aptitudes", value: "aptitudes" },
+                { label: "Certificación", value: "certification" },
+                { label: "Educación", value: "education" },
+                { label: "Experiencia", value: "experiencie" },
+                { label: "Idiomas", value: "languages" },
+                { label: "Logros", value: "achievements" }
+              ].map((item) => (
+                <Button
+                  key={item.value}
+                  fullWidth
+                  variant={view === item.value ? "contained" : "outlined"}
+                  sx={{
+                    mb: 1,
+                    bgcolor: view === item.value ? "#2e7d32" : "transparent",
+                    color: view === item.value ? "#fff" : "#2e7d32",
+                    borderColor: "#2e7d32",
+                    ":hover": {
+                      bgcolor: view === item.value ? "#1b5e20" : "#a5d6a7",
+                    },
+                  }}
+                  onClick={() => setView(item.value)}
+                >
+                  {item.label}
+                </Button>
+              ))}
+            </Paper>
+          </Grid>
+        </Grid>
       </Container>
-    </div>
+    </Box>
   );
 };
 
