@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AppBar, Toolbar, Button, Container, Typography } from "@mui/material";
+import { AppBar, Toolbar, Button, Container } from "@mui/material";
 import FormCV from "../components/FormCV";
 import WorkExperience from "../components/WorkExperiencie";
 import Experience from "../components/Experiencie";
@@ -17,11 +17,6 @@ const ShowCV = () => {
 
   return (
     <div>
-      <Container>
-        <Typography variant="h4" gutterBottom>
-          Curriculum Vitae
-        </Typography>
-      </Container>
       <AppBar position="static">
         <Toolbar>
           <Button color="inherit" onClick={() => setView("form")}>

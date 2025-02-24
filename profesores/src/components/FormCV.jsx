@@ -52,7 +52,7 @@ const PersonalInfo = (id) => {
   }
 
   return (
-    console.log("Datos del profesor:", data.profesor),
+    console.log("Datos del profesor:", data),
     (
       <Container maxWidth="md" sx={{ mt: 5 }}>
         <Card sx={{ p: 3, boxShadow: 3 }}>
