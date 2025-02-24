@@ -20,7 +20,7 @@ const WorkExperience = ( id ) => {
     api
       .get(`/api/profesor/cv/${idProfesor}`)
       .then((response) => {
-        console.log("Respuesta completa:", response.data); // Verifica estructura
+        console.log("Respuesta completa:", response.data);
         setAptitudes(fetchAptitudes(response.data));
       })
       .catch((error) => {

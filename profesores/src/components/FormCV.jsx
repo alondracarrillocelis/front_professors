@@ -10,7 +10,7 @@ import { useState, useEffect } from "react";
 import api from "../api";
 
 const PersonalInfo = (id) => {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const idProfesor = id.id;
 
@@ -21,6 +21,7 @@ const PersonalInfo = (id) => {
     api
       .get(`/api/profesor/cv/${idProfesor}`)
       .then((response) => {
+        console.log(response.data)
         setData(response.data);
         setLoading(false);
       })
@@ -52,7 +53,6 @@ const PersonalInfo = (id) => {
   }
 
   return (
-    console.log("Datos del profesor:", data),
     (
       <Container maxWidth="md" sx={{ mt: 5 }}>
         <Card sx={{ p: 3, boxShadow: 3 }}>
