@@ -13,8 +13,7 @@ const ShowCV = () => {
   const [view, setView] = useState("form");
   const { id } = useParams();
 
-  console.log("ID recibido en el frontend:", id);
-
+ 
   return (
     <Box sx={{ flexGrow: 1, bgcolor: "#f5f5f5", minHeight: "100vh" }}>
       <AppBar position="static" sx={{ bgcolor: "#2e7d32" }}>

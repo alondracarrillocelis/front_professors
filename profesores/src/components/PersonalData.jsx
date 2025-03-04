@@ -1,7 +1,9 @@
-import { useFormik } from "formik";
+import { useState } from "react";
+import { useFormik } from "formik"; 
 import * as Yup from "yup";
-import { Container, TextField, Button, Paper, Typography, Grid, MenuItem } from "@mui/material";
+import { Container, TextField, Button, Paper, Typography, Grid, MenuItem, Snackbar, Alert } from "@mui/material";
 import { AccountCircle, Email, Phone, Home, Badge } from "@mui/icons-material";
+import { newProfesor } from "../api";  
 
 const validationSchema = Yup.object({
   nombre: Yup.string().min(1).max(50).required("El nombre es obligatorio"),
@@ -22,6 +24,8 @@ const validationSchema = Yup.object({
 });
 
 const PersonalData = () => {
+  const [feedback, setFeedback] = useState({ open: false, message: "", severity: "success" });
+
   const formik = useFormik({
     initialValues: {
       nombre: "",
@@ -41,9 +45,21 @@ const PersonalData = () => {
       resumen_profesional: "",
     },
     validationSchema,
-    onSubmit: (values) => {
-      console.log("Datos enviados:", values);
-    },
+    loginonSubmit: async (values, { setSubmitting, resetForm }) => {
+      try {
+        const response = await newProfesor(values);
+        const idProfesor = response.data.id; 
+        localStorage.setItem("id_profesor", idProfesor);  
+        setFeedback({ open: true, message: "Profesor registrado exitosamente", severity: "success" });
+        resetForm();
+      } catch (error) {
+        console.error("Error al registrar profesor:", error);
+        setFeedback({ open: true, message: "Hubo un error al registrar al profesor", severity: "error" });
+      } finally {
+        setSubmitting(false);
+      }
+    }
+    
   });
 
   return (
@@ -117,18 +133,41 @@ const PersonalData = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              <Button type="submit" variant="contained" fullWidth sx={{
-                backgroundColor: "#A6D785",
-                borderRadius: 3,
-                '&:hover': { backgroundColor: "#8EC16D" },
-                transition: "0.3s ease-in-out"
-              }}>
-                Enviar
+              <Button 
+                type="submit" 
+                variant="contained" 
+                fullWidth 
+                disabled={formik.isSubmitting}
+                sx={{
+                  backgroundColor: "#A6D785",
+                  borderRadius: 3,
+                  '&:hover': { backgroundColor: "#8EC16D" },
+                  transition: "0.3s ease-in-out"
+                }}
+              >
+                {formik.isSubmitting ? "Enviando..." : "Enviar"}
               </Button>
             </Grid>
           </Grid>
         </form>
       </Paper>
+
+      {/* Feedback Snackbar */}
+      <Snackbar 
+        open={feedback.open} 
+        autoHideDuration={3000} 
+        onClose={() => setFeedback({ ...feedback, open: false })} 
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }} 
+      >
+        <Alert 
+          onClose={() => setFeedback({ ...feedback, open: false })} 
+          severity={feedback.severity} 
+          variant="filled"
+          sx={{ borderRadius: 2 }}
+        >
+          {feedback.message}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };
